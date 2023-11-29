@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+
+    .password-input {
+      position: relative;
+    }
+
+    #password, #confirmPassword {
+      border: 1px solid #ddd;
+      width: 78%;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    #passwordStrength {
+      margin-top: -5px;
+      font-size: 12px;
+    }
+
+    .password-description {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    button {
+      background-color: #28a745;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .confirmation {
+      text-align: center;
+      color: #28a745;
+      font-size: 18px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .weak-password {
+      border: 1px solid #dc3545 !important;
+    }
+
+    .strong-password {
+      border: 1px solid #28a745 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="registrationForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Choose a username" required>
+
+    <label for="password" class="password-input">
+      Password:
+      <input type="password" id="password" name="password" placeholder="Enter a strong password" required>
+      <span class="toggle-password" onclick="togglePassword('password')">&#x1f441;</span>
+    </label>
+    <div id="passwordStrength"></div>
+    <div class="password-description">
+      Password should contain at least one uppercase letter, one special character, and one or more digits.
+    </div>
+
+    <label for="confirmPassword" class="password-input">
+      Confirm Password:
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+      <span class="toggle-password" onclick="togglePassword('confirmPassword')">&#x1f441;</span>
+    </label>
+
+    <button type="button" onclick="validateForm()">Submit</button>
+  </form>
+
+  <div id="confirmation" class="confirmation">
+    <h1>Registration successful! Welcome to the Team!&#128521;</h1>
+  </div>
+
+  <script>
+    function validateForm() {
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+      var confirmPassword = document.getElementById('confirmPassword').value;
+
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var uppercaseRegex = /[A-Z]/;
+      var digitRegex = /\d/;
+      var specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+      if (name === "" || email === "" || username === "" || password === "" || confirmPassword === "") {
+        alert('Please fill in all fields');
+      } else if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+      } else if (password.length < 8 || !uppercaseRegex.test(password) || !digitRegex.test(password) || !specialCharRegex.test(password)) {
+        alert('Password must be at least 8 characters long and include at least one uppercase letter, one special character, and one or more digits.');
+      } else if (password !== confirmPassword) {
+        alert('Passwords do not match. Please confirm your password.');
+      } else {
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('confirmation').style.display = 'block';
+      }
+    }
+    document.getElementById('password').addEventListener('input', function () {
+      var password = this.value;
+      var strengthText = document.getElementById('passwordStrength');
+      var strengthColor = '';
+
+      var uppercaseRegex = /[A-Z]/;
+      var digitRegex = /\d/;
+      var specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+      if (password.length < 8 || !uppercaseRegex.test(password) || !digitRegex.test(password) || !specialCharRegex.test(password)) {
+        strengthText.innerHTML = 'Weak password';
+        strengthColor = 'weak-password';
+      } else {
+        strengthText.innerHTML = 'Strong password';
+        strengthColor = 'strong-password';
+      }
+
+      this.className = strengthColor;
+    });
+    function togglePassword(inputId) {
+      var passwordInput = document.getElementById(inputId);
+      var type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+    }
+  </script>
+
+</body>
+</html>
